@@ -14,7 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.x4twister.doit.databinding.FragmentDoListBinding
-import ru.x4twister.doit.databinding.ListItemTargetBinding
+import ru.x4twister.doit.databinding.ListItemChecklistBinding
+import ru.x4twister.doit.model.CheckList
+import ru.x4twister.doit.model.CheckListLab
 
 class DoListFragment: Fragment() {
 
@@ -28,7 +30,7 @@ class DoListFragment: Fragment() {
 
         binding.recycleView.run {
             layoutManager=LinearLayoutManager(activity)
-            adapter=TargetAdapter(listOf(Target("abc"),Target("xyz")))
+            adapter=CheckListAdapter(CheckListLab.checkLists)
         }
 
         return binding.root
@@ -38,31 +40,31 @@ class DoListFragment: Fragment() {
         fun newInstance()=DoListFragment()
     }
 
-    inner class TargetHolder(val binding: ListItemTargetBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class CheckListHolder(val binding: ListItemChecklistBinding) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(target: Target) {
-            binding.viewModel!!.target=target
+        fun bind(checkList: CheckList) {
+            binding.viewModel!!.checkList=checkList
         }
 
         init {
-            binding.viewModel=TargetViewModel()
+            binding.viewModel=CheckListViewModel()
         }
     }
 
-    inner class TargetAdapter(private val targets: List<Target>): RecyclerView.Adapter<TargetHolder>() {
+    inner class CheckListAdapter(private val checkLists: List<CheckList>): RecyclerView.Adapter<CheckListHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TargetHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckListHolder {
             val inflater=LayoutInflater.from(activity)
-            val binding:ListItemTargetBinding=DataBindingUtil
-                .inflate(inflater,R.layout.list_item_target,parent,false)
+            val binding:ListItemChecklistBinding=DataBindingUtil
+                .inflate(inflater,R.layout.list_item_checklist,parent,false)
 
-            return TargetHolder(binding)
+            return CheckListHolder(binding)
         }
 
-        override fun getItemCount()=targets.size
+        override fun getItemCount()=checkLists.size
 
-        override fun onBindViewHolder(holder: TargetHolder, position: Int) {
-            holder.bind(targets[position])
+        override fun onBindViewHolder(holder: CheckListHolder, position: Int) {
+            holder.bind(checkLists[position])
         }
     }
 }

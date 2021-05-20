@@ -3,6 +3,6 @@
  * This code is licensed under MIT license (see LICENSE.txt for details)
  */
 
-package ru.x4twister.doit
+package ru.x4twister.doit.model
 
-class Target(val name:String)
+class CheckList(val id: String, val name: String, val tasks: List<Task>)

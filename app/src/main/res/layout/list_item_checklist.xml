@@ -4,11 +4,12 @@
     <data>
         <variable
             name="viewModel"
-            type="ru.x4twister.doit.TargetViewModel" />
+            type="ru.x4twister.doit.CheckListViewModel" />
     </data>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{(view)->viewModel.onClick(view)}"
         android:text="@{viewModel.title}"
         tools:text="value"/>
 </layout>
