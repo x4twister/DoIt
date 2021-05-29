@@ -1,7 +1,6 @@
 package ru.x4twister.doit.editor
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -48,6 +47,14 @@ class CheckListFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        parentFragmentManager.setFragmentResultListener(EditTextFragment.KEY,this) { key, bundle ->
+            val requestCode=bundle.getInt(EditTextFragment.EXTRA_REQUEST)
+            val resultCode=bundle.getInt(EditTextFragment.EXTRA_RESULT)
+            val result = bundle.getString(EditTextFragment.EXTRA_TEXT)!!
+
+            onEditTextFragmentResult(requestCode,resultCode,result)
+        }
 
         checkListId= requireArguments().getSerializable(ARG_CHECKLIST_ID).toString()
 
@@ -114,16 +121,13 @@ class CheckListFragment: Fragment() {
     }
 
     private fun showDialog(default: String, title: String, type: Int) {
-        val dialog = EditTextFragment.newInstance(default, title)
-        dialog.setTargetFragment(this, type)
-        dialog.show(requireFragmentManager(), DIALOG_TEXT)
+        val dialog = EditTextFragment.newInstance(type, default, title)
+        dialog.show(parentFragmentManager, DIALOG_TEXT)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    private fun onEditTextFragmentResult(requestCode: Int, resultCode: Int, result: String) {
         if (resultCode!= Activity.RESULT_OK)
             return
-
-        val result = EditTextFragment.getValue(data)
 
         when (requestCode){
             REQUEST_TEXT -> {
