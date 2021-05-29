@@ -24,8 +24,8 @@ class EditTextFragment: DialogFragment() {
         val binding: DialogEditTextBinding=DataBindingUtil
             .inflate(LayoutInflater.from(activity),R.layout.dialog_edit_text,null,false)
 
-        val value=arguments!!.getString(ARG_VALUE)
-        val title=arguments!!.getString(ARG_TITLE)
+        val value=requireArguments().getString(ARG_VALUE)
+        val title=requireArguments().getString(ARG_TITLE)
         binding.editText.setText(value)
 
         return AlertDialog.Builder(activity)

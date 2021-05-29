@@ -63,7 +63,7 @@ class DoListFragment: Fragment() {
             "Create" -> {
                 val checkList= CheckListLab.createCheckList()
 
-                val intent= CheckListActivity.newIntent(context!!,checkList.id)
+                val intent= CheckListActivity.newIntent(requireContext(),checkList.id)
                 startActivity(intent)
                 updateUI()
                 true
@@ -91,7 +91,7 @@ class DoListFragment: Fragment() {
         fun newInstance()=DoListFragment()
     }
 
-    inner class CheckListHolder(val binding: ListItemChecklistBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class CheckListHolder(private val binding: ListItemChecklistBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(checkList: CheckList) {
             binding.viewModel!!.checkList=checkList

@@ -49,7 +49,7 @@ class CheckListFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        checkListId= arguments!!.getSerializable(ARG_CHECKLIST_ID).toString()
+        checkListId= requireArguments().getSerializable(ARG_CHECKLIST_ID).toString()
 
         setHasOptionsMenu(true)
     }
@@ -116,7 +116,7 @@ class CheckListFragment: Fragment() {
     private fun showDialog(default: String, title: String, type: Int) {
         val dialog = EditTextFragment.newInstance(default, title)
         dialog.setTargetFragment(this, type)
-        dialog.show(fragmentManager!!, DIALOG_TEXT)
+        dialog.show(requireFragmentManager(), DIALOG_TEXT)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

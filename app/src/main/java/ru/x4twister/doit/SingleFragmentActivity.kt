@@ -17,7 +17,7 @@ abstract class SingleFragmentActivity: AppCompatActivity() {
     @get:LayoutRes
     protected val layoutResId=R.layout.activity_fragment
 
-    protected val containerId=R.id.fragment_container
+    private val containerId=R.id.fragment_container
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
