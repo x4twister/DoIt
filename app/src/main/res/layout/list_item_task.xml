@@ -6,9 +6,13 @@
             name="viewModel"
             type="ru.x4twister.doit.editor.TaskViewModel" />
     </data>
-    <TextView
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@{viewModel.title}"
-        tools:text="value"/>
+        android:checked="@{viewModel.checked}"
+        android:onClick="@{(view)->viewModel.onClick(view)}"
+        tools:text="value" />
 </layout>

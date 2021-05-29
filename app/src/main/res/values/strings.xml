@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">DoIt</string>
+    <string name="new_checklist">Create</string>
+    <string name="load_checklist">Load</string>
+    <string name="edit">Edit</string>
+    <!--<string name="info">Info</string>-->
+    <string name="delete_checklist">Delete checklist</string>
+    <string name="rename_checklist">Rename checklist</string>
 </resources>

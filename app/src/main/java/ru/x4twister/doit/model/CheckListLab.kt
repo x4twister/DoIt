@@ -7,9 +7,15 @@ object CheckListLab {
             it.id==id
         }
 
-    val checkLists: List<CheckList> = (1..50).map { it ->
-        CheckList(it.toString(),"Name $it",(1..5).map {
-            Task("Task $it",false)
-        })
+    fun createCheckList(): CheckList {
+        val checkList = CheckList.newInstance()
+        checkLists.add(checkList)
+        return checkList
     }
+
+    fun deleteCheckList(checkList: CheckList) {
+        checkLists.remove(checkList)
+    }
+
+    var checkLists: MutableList<CheckList> = mutableListOf()
 }

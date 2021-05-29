@@ -1,9 +1,9 @@
 package ru.x4twister.doit.editor
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,7 +19,7 @@ import ru.x4twister.doit.model.Task
 class CheckListFragment: Fragment() {
 
     interface Callback{
-        fun onTopicDeleted()
+        fun onCheckListDeleted()
     }
 
     val callback: Callback by lazy {
@@ -71,10 +71,69 @@ class CheckListFragment: Fragment() {
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.fragment_checklist,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.title){
+            "Edit" -> {
+                checkListViewModel.editMode=checkListViewModel.editMode.not()
+                true
+            }
+            /*"Info" -> {
+                val intent= InfoActivity.newIntent(context!!,checklist.id)
+                context!!.startActivity(intent)
+                true
+            }*/
+            "Rename checklist" -> {
+                showDialog(checkList.name, "name", REQUEST_TEXT)
+                true
+            }
+            "Delete checklist" -> {
+                showDialog("", "Enter '${checkList.name}' for delete", REQUEST_DELETE)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showDialog(default: String, title: String, type: Int) {
+        val dialog = EditTextFragment.newInstance(default, title)
+        dialog.setTargetFragment(this, type)
+        dialog.show(fragmentManager!!, DIALOG_TEXT)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode!= Activity.RESULT_OK)
+            return
+
+        val result = EditTextFragment.getValue(data)
+
+        when (requestCode){
+            REQUEST_TEXT -> {
+                checkList.name= result
+                //checkListViewModel.notifyChange()
+                activity?.title=checkList.name
+            }
+
+            REQUEST_DELETE -> {
+                if (checkList.name==result) {
+                    CheckListLab.deleteCheckList(checkList)
+                    callback.onCheckListDeleted()
+                }
+            }
+        }
+    }
 
     companion object{
 
         const val ARG_CHECKLIST_ID="checklist_id"
+        const val DIALOG_TEXT="DialogText"
+        const val REQUEST_TEXT=0
+        const val REQUEST_DELETE=3
 
         fun newInstance(checkListId: String): CheckListFragment {
             val args= Bundle()

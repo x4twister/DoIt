@@ -1,3 +1,3 @@
 package ru.x4twister.doit.model
 
-class Task (val name:String, val done: Boolean)
+class Task (val name:String, var done: Boolean)

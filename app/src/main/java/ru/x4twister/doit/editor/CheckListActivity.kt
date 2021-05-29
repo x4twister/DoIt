@@ -15,14 +15,14 @@ class CheckListActivity: SingleFragmentActivity(), CheckListFragment.Callback  {
 
         const val EXTRA_CHECKLIST_ID="ru.x4twister.doit.editor.checklist_id"
 
-        fun newIntent(packageContext: Context, topicId: String): Intent {
+        fun newIntent(packageContext: Context, checklistId: String): Intent {
             val intent= Intent(packageContext,CheckListActivity::class.java)
-            intent.putExtra(EXTRA_CHECKLIST_ID,topicId)
+            intent.putExtra(EXTRA_CHECKLIST_ID,checklistId)
             return intent
         }
     }
 
-    override fun onTopicDeleted() {
+    override fun onCheckListDeleted() {
         finish()
     }
 }
