@@ -32,8 +32,14 @@ class CheckListFragment: Fragment() {
         CheckListLab.getCheckList(checkListId)!!
     }
 
+    private var currentTask: Task?=null
+
     private val checkListViewModel by lazy {
-        EditorViewModel()
+        EditorViewModel(object: EditorViewModel.Callback{
+            override fun onAdd() {
+                requestTaskName(checkList.createTask())
+            }
+        })
     }
 
     private val taskAdapter by lazy {
@@ -59,6 +65,7 @@ class CheckListFragment: Fragment() {
 
         activity?.title=checkList.name
 
+        checkListViewModel.editMode=checkList.tasks.isEmpty()
         binding.viewModel=checkListViewModel
 
         binding.recycleView.run {
@@ -81,6 +88,7 @@ class CheckListFragment: Fragment() {
         return when (item.title){
             "Edit" -> {
                 checkListViewModel.editMode=checkListViewModel.editMode.not()
+                taskAdapter.notifyDataSetChanged()
                 true
             }
             /*"Info" -> {
@@ -100,6 +108,11 @@ class CheckListFragment: Fragment() {
         }
     }
 
+    private fun requestTaskName(task: Task) {
+        currentTask = task
+        showDialog(task.name, "Name", REQUEST_TASK)
+    }
+
     private fun showDialog(default: String, title: String, type: Int) {
         val dialog = EditTextFragment.newInstance(default, title)
         dialog.setTargetFragment(this, type)
@@ -115,7 +128,6 @@ class CheckListFragment: Fragment() {
         when (requestCode){
             REQUEST_TEXT -> {
                 checkList.name= result
-                //checkListViewModel.notifyChange()
                 activity?.title=checkList.name
             }
 
@@ -125,6 +137,11 @@ class CheckListFragment: Fragment() {
                     callback.onCheckListDeleted()
                 }
             }
+
+            REQUEST_TASK -> {
+                currentTask!!.name=result
+                taskAdapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -133,7 +150,8 @@ class CheckListFragment: Fragment() {
         const val ARG_CHECKLIST_ID="checklist_id"
         const val DIALOG_TEXT="DialogText"
         const val REQUEST_TEXT=0
-        const val REQUEST_DELETE=3
+        const val REQUEST_DELETE=1
+        const val REQUEST_TASK=2
 
         fun newInstance(checkListId: String): CheckListFragment {
             val args= Bundle()
@@ -152,7 +170,16 @@ class CheckListFragment: Fragment() {
         }
 
         init {
-            binding.viewModel=TaskViewModel()
+            binding.viewModel=TaskViewModel(object: TaskViewModel.Callback{
+                override fun onEdit(task: Task) {
+                    requestTaskName(task)
+                }
+
+                override fun onDelete(task: Task) {
+                    checkList.tasks.remove(task)
+                    taskAdapter.notifyDataSetChanged()
+                }
+            }) { checkListViewModel.editMode }
         }
     }
 

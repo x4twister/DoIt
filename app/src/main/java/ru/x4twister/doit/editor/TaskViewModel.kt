@@ -4,7 +4,12 @@ import android.view.View
 import androidx.databinding.BaseObservable
 import ru.x4twister.doit.model.Task
 
-class TaskViewModel: BaseObservable() {
+class TaskViewModel(val callback:Callback,val editMode: ()->Boolean): BaseObservable() {
+
+    interface Callback{
+        fun onEdit(task: Task)
+        fun onDelete(task: Task)
+    }
 
     val title
         get() = task!!.name
@@ -18,7 +23,28 @@ class TaskViewModel: BaseObservable() {
             notifyChange()
         }
 
-    fun onClick(view: View){
-        task!!.done=!task!!.done
+    fun onSwitchClick(view: View){
+        task!!.done=task!!.done.not()
     }
+
+    fun onClick(view: View) {
+        if (editMode())
+            callback.onEdit(task!!)
+    }
+
+    fun onDeleteClick(view: View) {
+        callback.onDelete(task!!)
+    }
+
+    fun editVisibility()=
+        if (editMode())
+            View.VISIBLE
+        else
+            View.GONE
+
+    fun defaultVisibility()=
+        if (editMode())
+            View.GONE
+        else
+            View.VISIBLE
 }
