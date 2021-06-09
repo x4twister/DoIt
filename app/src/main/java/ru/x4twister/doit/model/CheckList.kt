@@ -5,17 +5,38 @@
 
 package ru.x4twister.doit.model
 
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import io.realm.kotlin.createObject
 import java.util.*
 
-class CheckList(val id: String, var name: String, val tasks: MutableList<Task>) {
+open class CheckList : RealmObject() {
+
+    @PrimaryKey
+    var id: String = ""
+
+    var name: String = "New checklist"
+        set(value) {
+            realm.executeTransaction {
+                field = value
+            }
+        }
+
+    val tasks: RealmList<Task> = RealmList()
 
     fun createTask(): Task {
-        val task=Task.newInstance()
+        realm.beginTransaction()
+        val task = Task.newInstance()
         tasks.add(task)
+        realm.commitTransaction()
+
         return task
     }
 
     companion object {
-        fun newInstance()=CheckList(UUID.randomUUID().toString(),"New checklist", mutableListOf())
+        fun newInstance() =
+            Realm.getDefaultInstance().createObject<CheckList>(UUID.randomUUID().toString())
     }
 }
