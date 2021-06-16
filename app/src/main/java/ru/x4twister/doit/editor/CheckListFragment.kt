@@ -111,6 +111,15 @@ class CheckListFragment: Fragment() {
                 showDialog("", "Enter '${checkList.name}' for delete", REQUEST_DELETE)
                 true
             }
+            "Reset" -> {
+                checkList.tasks.filter {
+                    it.done
+                }.forEach {
+                    it.done=it.done.not()
+                }
+                taskAdapter.notifyDataSetChanged()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
