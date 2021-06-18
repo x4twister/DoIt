@@ -35,6 +35,13 @@ open class CheckList : RealmObject() {
         return task
     }
 
+    fun deleteTask(task: Task) {
+        realm.executeTransaction {
+            tasks.remove(task)
+            task.deleteFromRealm()
+        }
+    }
+
     companion object {
         fun newInstance() =
             Realm.getDefaultInstance().createObject<CheckList>(UUID.randomUUID().toString())

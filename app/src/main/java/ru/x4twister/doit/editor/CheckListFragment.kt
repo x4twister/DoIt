@@ -189,7 +189,7 @@ class CheckListFragment: Fragment() {
                 }
 
                 override fun onDelete(task: Task) {
-                    checkList.tasks.remove(task)
+                    checkList.deleteTask(task)
                     taskAdapter.notifyDataSetChanged()
                 }
             }) { checkListViewModel.editMode }
