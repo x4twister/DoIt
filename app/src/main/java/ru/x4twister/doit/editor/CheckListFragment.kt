@@ -1,6 +1,8 @@
 package ru.x4twister.doit.editor
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -14,6 +16,7 @@ import ru.x4twister.doit.databinding.ListItemTaskBinding
 import ru.x4twister.doit.model.CheckList
 import ru.x4twister.doit.model.CheckListLab
 import ru.x4twister.doit.model.Task
+import java.io.OutputStreamWriter
 
 class CheckListFragment: Fragment() {
 
@@ -103,6 +106,16 @@ class CheckListFragment: Fragment() {
                 context!!.startActivity(intent)
                 true
             }*/
+            "Save checklist" -> {
+                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TITLE, "${checkList.name}.txt")
+                }
+                // NOTE deprecated? This is from the official docs (04.08.21)
+                startActivityForResult(intent, CREATE_FILE)
+                true
+            }
             "Rename checklist" -> {
                 showDialog(checkList.name, "name", REQUEST_TEXT)
                 true
@@ -121,6 +134,31 @@ class CheckListFragment: Fragment() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        if (resultCode!= Activity.RESULT_OK)
+            return
+
+        when (requestCode) {
+            CREATE_FILE -> {
+                val text=checkList.tasks.joinToString(separator = "\n",transform = {
+                    it.name
+                })
+
+                intent?.data?.also {
+                    writeTextFromUri(text,it)
+                }
+            }
+        }
+    }
+
+    private fun writeTextFromUri(text: String, uri: Uri) {
+        val outputStream = requireContext().contentResolver.openOutputStream(uri)!!
+        OutputStreamWriter(outputStream).apply {
+            write(text)
+            close()
         }
     }
 
@@ -165,6 +203,8 @@ class CheckListFragment: Fragment() {
         const val REQUEST_TEXT=0
         const val REQUEST_DELETE=1
         const val REQUEST_TASK=2
+
+        const val CREATE_FILE=0
 
         fun newInstance(checkListId: String): CheckListFragment {
             val args= Bundle()

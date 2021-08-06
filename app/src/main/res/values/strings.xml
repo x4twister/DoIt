@@ -5,6 +5,7 @@
     <string name="edit">Edit</string>
     <!--<string name="info">Info</string>-->
     <string name="delete_checklist">Delete checklist</string>
+    <string name="save_checklist">Save checklist</string>
     <string name="rename_checklist">Rename checklist</string>
     <string name="reset">Reset</string>
 </resources>

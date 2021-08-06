@@ -11,6 +11,9 @@
         android:title="@string/info"
         app:showAsAction="ifRoom|withText"/>-->
     <item
+        android:title="@string/save_checklist"
+        app:showAsAction="never"/>
+    <item
         android:title="@string/rename_checklist"
         app:showAsAction="never"/>
     <item

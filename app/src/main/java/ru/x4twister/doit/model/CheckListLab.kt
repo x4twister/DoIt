@@ -34,4 +34,20 @@ object CheckListLab {
             checkList.deleteFromRealm()
         }
     }
+
+    fun createChecklistFromText(name: String, data: String): CheckList {
+        val checkList= createCheckList()
+
+        if (name.isNotEmpty())
+            checkList.name=name.removeSuffix(".txt")
+
+        if (data.isNotEmpty()){
+            data.split("\n").forEach{ line ->
+                val task=checkList.createTask()
+                task.name=line
+            }
+        }
+
+        return checkList
+    }
 }
