@@ -42,6 +42,12 @@ open class CheckList : RealmObject() {
         }
     }
 
+    fun done(): Boolean {
+        return tasks.all {
+            it.done
+        }
+    }
+
     companion object {
         fun newInstance() =
             Realm.getDefaultInstance().createObject<CheckList>(UUID.randomUUID().toString())

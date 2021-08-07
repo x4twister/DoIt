@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import ru.x4twister.doit.R
 import ru.x4twister.doit.databinding.FragmentChecklistListBinding
 import ru.x4twister.doit.databinding.ListItemTaskBinding
@@ -231,6 +232,11 @@ class CheckListFragment: Fragment() {
                 override fun onDelete(task: Task) {
                     checkList.deleteTask(task)
                     taskAdapter.notifyDataSetChanged()
+                }
+
+                override fun onSwitch() {
+                    if (checkList.done())
+                        Snackbar.make(requireView(),"All tasks completed", Snackbar.LENGTH_LONG).show()
                 }
             }) { checkListViewModel.editMode }
         }

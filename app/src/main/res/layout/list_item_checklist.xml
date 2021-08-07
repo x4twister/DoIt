@@ -11,5 +11,6 @@
         android:layout_height="wrap_content"
         android:onClick="@{(view)->viewModel.onClick(view)}"
         android:text="@{viewModel.title}"
+        android:textSize="20sp"
         tools:text="value"/>
 </layout>

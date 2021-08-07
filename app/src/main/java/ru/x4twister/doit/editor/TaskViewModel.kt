@@ -9,6 +9,7 @@ class TaskViewModel(val callback:Callback,val editMode: ()->Boolean): BaseObserv
     interface Callback{
         fun onEdit(task: Task)
         fun onDelete(task: Task)
+        fun onSwitch()
     }
 
     val title
@@ -25,6 +26,7 @@ class TaskViewModel(val callback:Callback,val editMode: ()->Boolean): BaseObserv
 
     fun onSwitchClick(view: View){
         task!!.done=task!!.done.not()
+        callback.onSwitch()
     }
 
     fun onClick(view: View) {
